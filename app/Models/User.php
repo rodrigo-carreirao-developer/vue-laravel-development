@@ -2,15 +2,24 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Models\Base\BaseModel;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Foundation\Auth\Access\Authorizable;
 
-class User extends Authenticatable
+class User extends BaseModel implements
+    AuthenticatableContract,
+    AuthorizableContract,
+    CanResetPasswordContract
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use Authenticatable, Authorizable, CanResetPassword, MustVerifyEmail, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -44,5 +53,18 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function scopeSearch(Builder $query, $search)
+    {
+        if (!$search) {
+            return $query;
+        }
+        $likeStatement = $this->retrieveLikeStatement();
+        return $query->where(function ($q) use ($search, $likeStatement) {
+            $q->where('name', $likeStatement, "%{$search}%")
+              ->orWhere('email', $likeStatement, "%{$search}%")
+              ;
+        });
     }
 }
