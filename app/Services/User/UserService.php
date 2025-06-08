@@ -2,7 +2,6 @@
 
 namespace App\Services\User;
 
-use App\Base\BaseDTO;
 use App\Base\BaseService;
 use App\Repositories\User\UserRepository;
 
@@ -19,7 +18,7 @@ class UserService extends BaseService
 
     public function list(){
         return $this->userRepository
-            ->addFilter($this->baseDTO)
+            ->addFilter($this->filterDTO)
             ->setOrderBy($this->_orderBy)
             ->list();
     }

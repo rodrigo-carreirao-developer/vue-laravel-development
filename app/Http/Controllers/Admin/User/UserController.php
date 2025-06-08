@@ -7,11 +7,9 @@ use App\DTO\User\UserFilterDTO;
 use App\DTO\User\UserOrderByDTO;
 use App\Http\Requests\Admin\User\UserStoreRequest;
 use App\Http\Requests\Admin\User\UserUpdateRequest;
-use App\Http\Requests\Api\UsersStoreRequest;
 use App\Http\Resources\UsersCollection;
 use App\Http\Resources\UsersResource;
 use App\Models\User;
-use App\Repositories\General\UsersRepository;
 use App\Services\User\UserService;
 use Illuminate\Http\Request;
 
