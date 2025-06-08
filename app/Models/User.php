@@ -67,4 +67,32 @@ class User extends BaseModel implements
               ;
         });
     }
+    public function scopeCreatedAt(Builder $query, $value)
+    {
+        if (!$value) {
+            return $query;
+        }
+        return $query->whereDate('created_at',  $value)
+              ;
+    }
+    public function scopeName(Builder $query, $value)
+    {
+        if (!$value) {
+            return $query;
+        }
+        $likeStatement = $this->retrieveLikeStatement();
+
+        return $query->where('name', $likeStatement, "%{$value}%")
+              ;
+    }
+     public function scopeEmail(Builder $query, $value)
+    {
+        if (!$value) {
+            return $query;
+        }
+        $likeStatement = $this->retrieveLikeStatement();
+
+        return $query->where('email', $likeStatement, "%{$value}%")
+              ;
+    }
 }

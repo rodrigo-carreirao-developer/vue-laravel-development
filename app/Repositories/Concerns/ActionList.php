@@ -24,7 +24,13 @@ trait ActionList
 
     public function onBeforeList(Builder &$query):self{
         if($this->_filter){
-            $query->search($this->_filter['search']);
+            foreach($this->_filter as $key => $value){
+                if($value != ""){
+                    // Could be in a middleware!
+                    $method = str_replace(' ', '', lcfirst(ucwords(str_replace('_', ' ',str_replace('-', ' ', $key)))));
+                    $query->$method($value);
+                }
+            }
         }
         if(count($this->_orderBy)){
             $this->parseOrderBy($query);
