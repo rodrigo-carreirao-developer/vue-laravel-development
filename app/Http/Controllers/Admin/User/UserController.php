@@ -63,6 +63,18 @@ class UserController extends BaseController
     }
 
     /**
+     * POST - Used to validate frontend fields
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function validate(UserStoreRequest $request)
+    {
+        return $this->sendSuccess([], 'Validation passed.', \Illuminate\Http\Response::HTTP_OK);
+    }
+
+
+    /**
      * GET - Display the specified resource.
      *
      * @param  \App\Models\User  $entity
